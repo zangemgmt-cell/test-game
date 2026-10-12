@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: shattered-concord
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/session
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: GAME_DB_PATH
+        value: /tmp/shattered-concord.sqlite
+      - key: SECURE_COOKIES
+        value: "1"
+      - key: PUBLIC_ORIGIN
+        fromService:
+          type: web
+          name: shattered-concord
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: NODE_ENV
+        value: production
